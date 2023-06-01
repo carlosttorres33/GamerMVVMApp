@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -35,9 +36,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.carlostorres.gamermvvmapp.R
+import com.carlostorres.gamermvvmapp.domain.model.Response
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTextField
+import com.carlostorres.gamermvvmapp.presentation.navigation.AppScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.login.LoginViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.DarkGray500
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
@@ -45,9 +50,10 @@ import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink500
 import kotlinx.coroutines.withContext
 
 @Composable
-fun LoginContent(viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginContent(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
 
     var context = LocalContext.current
+    val loginFlow = viewModel.loginFlow.collectAsState()
 
     Box(
         modifier = Modifier
@@ -132,9 +138,7 @@ fun LoginContent(viewModel: LoginViewModel = hiltViewModel()) {
                     textButton = "Iniciar Sesión",
                     onClick = {
 
-                        Toast.makeText(context,viewModel.email.value, Toast.LENGTH_SHORT).show()
-                        Log.d("LoginContent:", "E-mail: ${viewModel.email.value}")
-                        Log.d("LoginContent:", "Contraseña: ${viewModel.password.value}")
+                        viewModel.login()
 
                     },
                     enable = viewModel.isEnableLoginButton
@@ -144,6 +148,30 @@ fun LoginContent(viewModel: LoginViewModel = hiltViewModel()) {
 
         }
 
+    }
+
+    loginFlow.value.let{
+        when(it){
+            Response.Loading ->{
+                Box(contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()){
+                    CircularProgressIndicator()
+                }
+            }
+            is Response.Succes -> {
+                LaunchedEffect(Unit){
+                    navController.navigate(route = AppScreen.Profile.route)
+                }
+                Toast.makeText(LocalContext.current, "Bienvenido :D", Toast.LENGTH_SHORT).show()
+            }
+            is Response.Faliure -> {
+                Toast.makeText(LocalContext.current, it.exception?.message ?: "Error Desconocido" , Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                //Toast.makeText(LocalContext.current, "Error Desconocido" , Toast.LENGTH_SHORT).show()
+            }
+
+        }
     }
 }
 
@@ -156,7 +184,7 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            LoginContent()
+            LoginContent(rememberNavController())
         }
     }
 }
