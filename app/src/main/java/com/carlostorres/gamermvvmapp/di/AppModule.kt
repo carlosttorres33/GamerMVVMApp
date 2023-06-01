@@ -5,13 +5,13 @@ import com.carlostorres.gamermvvmapp.domain.repository.AuthRepository
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.AuthUseCase
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.GetCurrentUser
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.Login
-import com.carlostorres.gamermvvmapp.presentation.navigation.AppScreen
+import com.carlostorres.gamermvvmapp.domain.use_cases.auth.Logout
+import com.carlostorres.gamermvvmapp.domain.use_cases.auth.SingUp
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -25,7 +25,9 @@ object AppModule {
     @Provides
     fun provideAuthCases(repository: AuthRepository) = AuthUseCase(
         getCurrentUser = GetCurrentUser(repository),
-        login = Login(repository)
+        login = Login(repository),
+        logout = Logout(repository),
+        singUp = SingUp(repository)
     )
 
 
