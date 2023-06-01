@@ -1,5 +1,6 @@
 package com.carlostorres.gamermvvmapp.presentation.components
 
+import android.graphics.Color
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +19,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink500
-import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink700
 
 @Composable
 fun DefaultButton(
@@ -28,7 +28,9 @@ fun DefaultButton(
     onClick :() -> Unit,
     color: ButtonColors = ButtonDefaults.buttonColors(Pink500),
     icono: ImageVector = Icons.Default.ArrowForward,
-    enable: Boolean = true
+    enable: Boolean = true,
+    colorText: androidx.compose.ui.graphics.Color = androidx.compose.ui.graphics.Color.White,
+    colorIcon: androidx.compose.ui.graphics.Color = androidx.compose.ui.graphics.Color.White
 ){
 
     Column() {
@@ -37,12 +39,12 @@ fun DefaultButton(
             onClick = onClick,
             enabled = enable
         ) {
-            Icon(imageVector = icono, contentDescription = "")
+            Icon(imageVector = icono, contentDescription = "", tint = colorIcon)
             Spacer(modifier = Modifier.width(10.dp))
-            Text(text = textButton)
+            Text(text = textButton, color = colorText)
         }
 
-        Text(text = errorMessage, modifier = Modifier.padding(top = 5.dp), fontSize = 11.sp, color = Pink700)
+        //Text(text = errorMessage, modifier = Modifier.padding(top = 5.dp), fontSize = 11.sp, color = Pink700)
 
     }
 

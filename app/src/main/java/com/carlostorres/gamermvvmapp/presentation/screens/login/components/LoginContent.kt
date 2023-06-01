@@ -137,7 +137,8 @@ fun LoginContent(navController: NavController, viewModel: LoginViewModel = hiltV
                         viewModel.login()
 
                     },
-                    enable = viewModel.isEnableLoginButton
+                    enable = viewModel.isEnableLoginButton,
+                    colorIcon = Color.White
                 )
 
             }

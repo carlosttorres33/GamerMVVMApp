@@ -157,6 +157,7 @@ fun SingupContent(navController: NavController,  viewModel: SingupViewModel = hi
                         .fillMaxWidth()
                         .padding(vertical = 15.dp),
                     enable = viewModel.isEnableButton,
+                    colorIcon = Color.White
                 )
 
             }
@@ -177,9 +178,8 @@ fun SingupContent(navController: NavController,  viewModel: SingupViewModel = hi
             }
             is Response.Succes ->{
                 LaunchedEffect(Unit){
-                    navController.navigate(route = AppScreen.Profile.route){
-                        popUpTo(AppScreen.Singup.route){inclusive = true}
-                    }
+                    navController.popBackStack(AppScreen.Login.route, true)
+                    navController.navigate(route = AppScreen.Profile.route)
                 }
             }
             is Response.Faliure -> {
