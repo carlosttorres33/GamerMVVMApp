@@ -1,4 +1,4 @@
-package com.carlostorres.gamermvvmapp.ui.theme
+package com.carlostorres.gamermvvmapp.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
