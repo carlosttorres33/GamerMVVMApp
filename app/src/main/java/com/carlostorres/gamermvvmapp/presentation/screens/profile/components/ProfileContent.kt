@@ -95,7 +95,7 @@ fun ProfileContent(
             colorText = Color.Black,
             icono = Icons.Default.Edit,
             onClick = {
-
+                navController.navigate(AppScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },
             colorIcon = Color.Black
         )

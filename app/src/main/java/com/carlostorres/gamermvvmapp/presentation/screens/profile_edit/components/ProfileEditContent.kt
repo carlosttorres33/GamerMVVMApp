@@ -1,4 +1,4 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.singup.components
+package com.carlostorres.gamermvvmapp.presentation.screens.profile_edit.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -30,12 +28,12 @@ import androidx.navigation.NavController
 import com.carlostorres.gamermvvmapp.R
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTextField
-import com.carlostorres.gamermvvmapp.presentation.screens.singup.SingupViewModel
+import com.carlostorres.gamermvvmapp.presentation.screens.profile_edit.ProfileEditViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.DarkGray500
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink500
 
 @Composable
-fun SingupContent(navController: NavController,  viewModel: SingupViewModel = hiltViewModel()) {
+fun ProfileEditContent(navController: NavController, viewModel: ProfileEditViewModel = hiltViewModel()) {
 
     val state = viewModel.state
 
@@ -73,7 +71,7 @@ fun SingupContent(navController: NavController,  viewModel: SingupViewModel = hi
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
 
                 Text(
-                    text = "REGISTRO",
+                    text = "Actualizar",
                     modifier = Modifier.padding(top = 40.dp),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
@@ -82,7 +80,7 @@ fun SingupContent(navController: NavController,  viewModel: SingupViewModel = hi
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "Por favor ingresa tus datos para continuar",
+                    text = "Ingresa tus nuevos datos",
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
@@ -100,57 +98,16 @@ fun SingupContent(navController: NavController,  viewModel: SingupViewModel = hi
                     }
                 )
 
-                DefaultTextField(
-                    modifier = Modifier.padding(top = 0.dp),
-                    value = state.email,
-                    onValueChange = { viewModel.onEmailInput(it) },
-                    label = "E-Mail",
-                    icon = Icons.Default.Email,
-                    keyboardType = KeyboardType.Email,
-                    errorMessage = viewModel.emailErrorMessage,
-                    validateField = {
-                        viewModel.validateEmail()
-                    }
-                )
-
-                DefaultTextField(
-                    modifier = Modifier.padding(top = 0.dp),
-                    value = state.passwoord,
-                    onValueChange = { viewModel.onPasswordInput(it) },
-                    label = "Contraseña",
-                    icon = Icons.Default.Lock,
-                    hideText = true,
-                    keyboardType = KeyboardType.Password,
-                    errorMessage = viewModel.passwordErrorMessage,
-                    validateField = {
-                        viewModel.validatePassword()
-                    }
-                )
-
-                DefaultTextField(
-                    modifier = Modifier.padding(top = 0.dp),
-                    value = state.confirmPassword,
-                    onValueChange = { viewModel.onConfirmPasswordInput(it) },
-                    label = "Confirmar Contraseña",
-                    icon = Icons.Outlined.Lock,
-                    hideText = true,
-                    keyboardType = KeyboardType.Password,
-                    errorMessage = viewModel.confirmPasswordErrMsg,
-                    validateField = {
-                        viewModel.validateConfirmPassword()
-                    }
-                )
-
                 DefaultButton(
-                    textButton = "Iniciar Sesión",
+                    textButton = "Actualizar",
                     onClick = {
-                              viewModel.onSingUp()
-                              },
+                        viewModel.onUpdate()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 15.dp),
-                    enable = viewModel.isEnableButton,
-                    colorIcon = Color.White
+                        .padding(top = 20.dp, bottom = 40.dp),
+                    colorIcon = Color.White,
+                    icono = Icons.Default.Edit
                 )
 
             }
@@ -160,4 +117,3 @@ fun SingupContent(navController: NavController,  viewModel: SingupViewModel = hi
     }
 
 }
-

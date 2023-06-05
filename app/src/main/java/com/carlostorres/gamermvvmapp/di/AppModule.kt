@@ -12,6 +12,7 @@ import com.carlostorres.gamermvvmapp.domain.use_cases.auth.Logout
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.SingUp
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.Create
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.GetUserById
+import com.carlostorres.gamermvvmapp.domain.use_cases.users.Update
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.UsersUseCases
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -52,7 +53,8 @@ object AppModule {
     @Provides
     fun provideUsersUseCases(repository: UsersRepository) = UsersUseCases(
         create = Create(repository),
-        getUserById = GetUserById(repository)
+        getUserById = GetUserById(repository),
+        update = Update(repository)
     )
 
 }
