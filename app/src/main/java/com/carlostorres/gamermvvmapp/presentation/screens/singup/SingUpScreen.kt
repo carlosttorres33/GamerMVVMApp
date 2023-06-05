@@ -8,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTopBar
+import com.carlostorres.gamermvvmapp.presentation.screens.singup.components.SingUp
 import com.carlostorres.gamermvvmapp.presentation.screens.singup.components.SingupContent
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 
@@ -31,6 +32,8 @@ fun SingupScreen(navController: NavHostController) {
 
         }
     ) 
+    
+    SingUp(navController = navController)
 }
 
 @Preview(showBackground = true, showSystemUi = true, )

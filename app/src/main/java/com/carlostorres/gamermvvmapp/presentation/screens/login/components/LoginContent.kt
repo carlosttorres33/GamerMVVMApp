@@ -1,7 +1,6 @@
 package com.carlostorres.gamermvvmapp.presentation.screens.login.components
 
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,16 +15,13 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,10 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.carlostorres.gamermvvmapp.R
-import com.carlostorres.gamermvvmapp.domain.model.Response
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTextField
-import com.carlostorres.gamermvvmapp.presentation.navigation.AppScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.login.LoginViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.DarkGray500
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
@@ -49,7 +43,9 @@ import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink500
 fun LoginContent(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
 
     //var context = LocalContext.current
-    val loginFlow = viewModel.loginFlow.collectAsState()
+    //val loginFlow = viewModel.loginFlow.collectAsState()
+
+    val state = viewModel.state
 
     Box(
         modifier = Modifier
@@ -102,12 +98,12 @@ fun LoginContent(navController: NavController, viewModel: LoginViewModel = hiltV
 
                 DefaultTextField(
                     modifier = Modifier.padding(top = 25.dp),
-                    value = viewModel.email.value,
-                    onValueChange = { viewModel.email.value = it },
+                    value = state.email,
+                    onValueChange = { viewModel.onEmailInput(it) },
                     label = "E-Mail",
                     icon = Icons.Default.Email,
                     keyboardType = KeyboardType.Email,
-                    errorMessage = viewModel.emailErrorMessage.value,
+                    errorMessage = viewModel.emailErrorMessage,
                     validateField = {
                         viewModel.validateEmail()
                     }
@@ -115,13 +111,13 @@ fun LoginContent(navController: NavController, viewModel: LoginViewModel = hiltV
 
                 DefaultTextField(
                     modifier = Modifier.padding(top = 5.dp),
-                    value = viewModel.password.value,
-                    onValueChange = { viewModel.password.value = it },
+                    value = state.password,
+                    onValueChange = { viewModel.onPasswordInput(it) },
                     label = "Contraseña",
                     icon = Icons.Default.Lock,
                     hideText = true,
                     keyboardType = KeyboardType.Password,
-                    errorMessage = viewModel.passwordErrorMessage.value,
+                    errorMessage = viewModel.passwordErrorMessage,
                     validateField = {
                         viewModel.validatePassword()
                     }
@@ -147,31 +143,6 @@ fun LoginContent(navController: NavController, viewModel: LoginViewModel = hiltV
 
     }
 
-    loginFlow.value.let{
-        when(it){
-            Response.Loading ->{
-                Box(contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()){
-                    CircularProgressIndicator()
-                }
-            }
-            is Response.Succes -> {
-                LaunchedEffect(Unit){
-                    navController.navigate(route = AppScreen.Profile.route){
-                        popUpTo(AppScreen.Login.route) {inclusive = true}
-                    }
-                }
-                Toast.makeText(LocalContext.current, "Bienvenido :D", Toast.LENGTH_SHORT).show()
-            }
-            is Response.Faliure -> {
-                Toast.makeText(LocalContext.current, it.exception.message ?: "Error Desconocido" , Toast.LENGTH_SHORT).show()
-            }
-            else -> {
-                //Toast.makeText(LocalContext.current, "Error Desconocido" , Toast.LENGTH_SHORT).show()
-            }
-
-        }
-    }
 }
 
 @Preview(showBackground = true)

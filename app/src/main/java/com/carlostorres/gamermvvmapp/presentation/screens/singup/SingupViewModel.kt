@@ -1,106 +1,140 @@
 package com.carlostorres.gamermvvmapp.presentation.screens.singup
 
 import android.util.Patterns
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.carlostorres.gamermvvmapp.domain.model.User
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.AuthUseCase
 import com.carlostorres.gamermvvmapp.domain.model.*
+import com.carlostorres.gamermvvmapp.domain.use_cases.users.UsersUseCases
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SingupViewModel @Inject constructor(private val authUseCase: AuthUseCase): ViewModel() {
+class SingupViewModel @Inject constructor(
+    private val authUseCase: AuthUseCase,
+    private val usersUseCases: UsersUseCases
+) : ViewModel() {
 
-    var username: MutableState<String> = mutableStateOf("")
-    var isUsernameValid: MutableState<Boolean> = mutableStateOf(false)
-    var usernameErrMsg: MutableState<String> = mutableStateOf("")
+    var state by mutableStateOf(SingUpState())
+        private set
 
-    var confirmPassword: MutableState<String> = mutableStateOf("")
-    var isConfirmPasswordValid: MutableState<Boolean> = mutableStateOf(false)
-    var confirmPasswordErrMsg: MutableState<String> = mutableStateOf("")
+    var isUsernameValid by mutableStateOf(false)
+        private set
+    var usernameErrMsg by mutableStateOf("")
+        private set
 
-    val email: MutableState<String> = mutableStateOf("")
-    var isEmailValid: MutableState<Boolean> = mutableStateOf(false)
-    var emailErrorMessage: MutableState<String> = mutableStateOf("")
+    var isConfirmPasswordValid by mutableStateOf(false)
+        private set
+    var confirmPasswordErrMsg by mutableStateOf("")
+        private set
 
-    var password: MutableState<String> = mutableStateOf("")
-    var isPasswordValid: MutableState<Boolean> = mutableStateOf(false)
-    var passwordErrorMessage: MutableState<String> = mutableStateOf("")
+    var isEmailValid by mutableStateOf(false)
+        private set
+    var emailErrorMessage by mutableStateOf("")
+        private set
+
+    var isPasswordValid by mutableStateOf(false)
+        private set
+    var passwordErrorMessage by mutableStateOf("")
+        private set
+
+
+    var user = User()
+
+    fun onEmailInput(email: String){
+        state = state.copy(email = email)
+    }
+    fun onUsernameInput(username: String){
+        state = state.copy(username = username)
+
+    }
+    fun onPasswordInput(password: String){
+        state = state.copy(passwoord = password)
+    }
+    fun onConfirmPasswordInput(passwordConfirm: String){
+        state = state.copy(confirmPassword = passwordConfirm)
+    }
 
     //Boton
     var isEnableButton: Boolean = false
-    fun enableButton(){
-        isEnableButton = isEmailValid.value && isPasswordValid.value && isUsernameValid.value && isConfirmPasswordValid.value
+    fun enableButton() {
+        isEnableButton =
+            isEmailValid && isPasswordValid && isUsernameValid && isConfirmPasswordValid
     }
 
-    fun validateConfirmPassword(){
-        if (password.value == confirmPassword.value){
-            isConfirmPasswordValid.value = true
-            confirmPasswordErrMsg.value = ""
-        }else{
-            isConfirmPasswordValid.value = false
-            confirmPasswordErrMsg.value = "Las contraseñas no coiinciden"
+    fun validateConfirmPassword() {
+        if (state.passwoord == state.confirmPassword) {
+            isConfirmPasswordValid = true
+            confirmPasswordErrMsg = ""
+        } else {
+            isConfirmPasswordValid = false
+            confirmPasswordErrMsg = "Las contraseñas no coiinciden"
         }
 
         enableButton()
     }
 
-    fun validateUsername(){
-        if (username.value.length >= 5){
-            isUsernameValid.value = true
-            usernameErrMsg.value = ""
-        }else{
-            isUsernameValid.value = false
-            usernameErrMsg.value = "Al menos 5 caracteres"
+    fun validateUsername() {
+        if (state.username.length >= 5) {
+            isUsernameValid = true
+            usernameErrMsg= ""
+        } else {
+            isUsernameValid = false
+            usernameErrMsg = "Al menos 5 caracteres"
         }
         enableButton()
     }
 
-    fun onSingUp(){
-        val user = User(
-            username = username.value,
-            email = email.value,
-            password = password.value
-        )
+
+    fun onSingUp() {
+        user.username = state.username
+        user.email = state.email
+        user.password = state.passwoord
+
 
         singUp(user)
 
     }
 
-    private val _singUpFlow = MutableStateFlow<Response<FirebaseUser>?>(null)
-    val singUpFlow: StateFlow<Response<FirebaseUser>?> = _singUpFlow
-    fun singUp(user: User) =  viewModelScope.launch {
-        _singUpFlow.value = Response.Loading
-        val result = authUseCase.singUp(user)
-        _singUpFlow.value = result
+    fun createUser() = viewModelScope.launch {
+        user.id = authUseCase.getCurrentUser()!!.uid
+        usersUseCases.create(user)
     }
 
-    fun validateEmail(){
+    var singupResponse by mutableStateOf<Response<FirebaseUser>?>(null)
+        private set
+
+    fun singUp(user: User) = viewModelScope.launch {
+        singupResponse = Response.Loading
+        val result = authUseCase.singUp(user)
+        singupResponse = result
+    }
+
+    fun validateEmail() {
         //Valida el correo
-        if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()){
-            isEmailValid.value = true
-            emailErrorMessage.value = ""
-        }else{
-            isEmailValid.value = false
-            emailErrorMessage.value = "El email no es válido"
+        if (Patterns.EMAIL_ADDRESS.matcher(state.email).matches()) {
+            isEmailValid = true
+            emailErrorMessage = ""
+        } else {
+            isEmailValid = false
+            emailErrorMessage = "El email no es válido"
         }
         enableButton()
     }
 
-    fun validatePassword(){
-        if (password.value.length >= 6){
-            isPasswordValid.value = true
-            passwordErrorMessage.value= ""
-        }else{
-            isPasswordValid.value = false
-            passwordErrorMessage.value= "Se necesitan al menos 6 caracteres"
+    fun validatePassword() {
+        if (state.passwoord.length >= 6) {
+            isPasswordValid = true
+            passwordErrorMessage= ""
+        } else {
+            isPasswordValid = false
+            passwordErrorMessage = "Se necesitan al menos 6 caracteres"
         }
         enableButton()
     }

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.carlostorres.gamermvvmapp.presentation.screens.login.components.Login
 import com.carlostorres.gamermvvmapp.presentation.screens.login.components.LoginBottomBar
 import com.carlostorres.gamermvvmapp.presentation.screens.login.components.LoginContent
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
@@ -30,6 +31,9 @@ fun LoginScreen(navController: NavHostController) {
             LoginBottomBar(navController)
         }
     )
+
+    //Manejar estado de petición de login
+    Login(navController = navController)
 }
 
 @Preview(showBackground = true, showSystemUi = true)

@@ -33,7 +33,10 @@ import com.carlostorres.gamermvvmapp.presentation.screens.profile.ProfileViewMod
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.*
 
 @Composable
-fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel = hiltViewModel()) {
+fun ProfileContent(
+    navController: NavHostController,
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
 
 
     Column(
@@ -65,20 +68,20 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
                 Image(
                     modifier = Modifier.size(115.dp),
                     painter = painterResource(id = R.drawable.user),
-                    contentDescription ="Imagen de usuario"
+                    contentDescription = "Imagen de usuario"
                 )
             }
-            
+
         }
         Spacer(modifier = Modifier.height(50.dp))
         Text(
-            text = "Nombre del Usuario",
+            text = viewModel.userData.username,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic
         )
         Text(
-            text = "Email del Usuario",
+            text = viewModel.userData.email,
             fontSize = 20.sp,
             fontStyle = FontStyle.Italic
         )
