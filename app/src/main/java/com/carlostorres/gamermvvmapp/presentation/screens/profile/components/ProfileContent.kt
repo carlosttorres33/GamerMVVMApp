@@ -31,11 +31,9 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.carlostorres.gamermvvmapp.R
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
-import com.carlostorres.gamermvvmapp.presentation.navigation.AppScreen
+import com.carlostorres.gamermvvmapp.presentation.navigation.AuthScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.profile.ProfileViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.*
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun ProfileContent(
@@ -112,7 +110,7 @@ fun ProfileContent(
             colorText = Color.Black,
             icono = Icons.Default.Edit,
             onClick = {
-                navController.navigate(AppScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
+                navController.navigate(AuthScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },
             colorIcon = Color.Black
         )
@@ -127,8 +125,8 @@ fun ProfileContent(
             colorText = Color.White,
             onClick = {
                 viewModel.logout()
-                navController.navigate(route = AppScreen.Login.route) {
-                    popUpTo(AppScreen.Profile.route) {
+                navController.navigate(route = AuthScreen.Login.route) {
+                    popUpTo(AuthScreen.Profile.route) {
                         inclusive = true
                     }
                 }

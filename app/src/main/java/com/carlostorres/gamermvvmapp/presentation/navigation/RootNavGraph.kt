@@ -6,31 +6,29 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.carlostorres.gamermvvmapp.presentation.screens.home.HomeScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.login.LoginScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.profile.ProfileScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.profile_edit.ProfileEditScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.singup.SingupScreen
 
 @Composable
-fun AppNavigation(navController: NavHostController) {
+fun RootNavGraph(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = AppScreen.Login.route
+        route = Graph.ROOT,
+        startDestination = Graph.AUTHENTICATION
     ){
 
-        composable(route=AppScreen.Login.route){
-            LoginScreen(navController)
+        authNavGraph(navController = navController)
+
+        composable(route = RootScreen.Home.route){
+            HomeScreen()
         }
 
-        composable(route = AppScreen.Singup.route){
-            SingupScreen(navController)
-        }
-        composable(route = AppScreen.Profile.route){
-            ProfileScreen(navController)
-        }
         composable(
-            route = AppScreen.ProfileEdit.route,
+            route = AuthScreen.ProfileEdit.route,
             arguments = listOf(navArgument("user"){
                 type = NavType.StringType
             })
@@ -42,4 +40,8 @@ fun AppNavigation(navController: NavHostController) {
 
     }
     
+}
+
+sealed class RootScreen(val route: String){
+    object Home: RootScreen("home")
 }
