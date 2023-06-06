@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -26,11 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.carlostorres.gamermvvmapp.R
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
 import com.carlostorres.gamermvvmapp.presentation.navigation.AppScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.profile.ProfileViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.*
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun ProfileContent(
@@ -65,11 +70,23 @@ fun ProfileContent(
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(50.dp))
-                Image(
-                    modifier = Modifier.size(115.dp),
-                    painter = painterResource(id = R.drawable.user),
-                    contentDescription = "Imagen de usuario"
-                )
+                if (viewModel.userData.image != ""){
+                    AsyncImage(
+                        model = viewModel.userData.image,
+                        contentDescription = "User Profile Picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .height(120.dp)
+                            .width(120.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Image(
+                        modifier = Modifier.size(115.dp),
+                        painter = painterResource(id = R.drawable.user),
+                        contentDescription = "Imagen de usuario"
+                    )
+                }
             }
 
         }

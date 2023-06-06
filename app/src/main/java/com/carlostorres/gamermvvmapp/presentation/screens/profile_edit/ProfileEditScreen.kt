@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTopBar
 import com.carlostorres.gamermvvmapp.presentation.screens.profile_edit.components.ProfileEditContent
+import com.carlostorres.gamermvvmapp.presentation.screens.profile_edit.components.SaveImage
 import com.carlostorres.gamermvvmapp.presentation.screens.profile_edit.components.Update
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,6 +35,8 @@ fun ProfileEditScreen(navController: NavHostController, user: String) {
         }
     )
 
+    SaveImage()
     Update()
+
 
 }
