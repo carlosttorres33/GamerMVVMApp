@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.carlostorres.gamermvvmapp.domain.model.Response
-import com.carlostorres.gamermvvmapp.presentation.navigation.AuthScreen
+import com.carlostorres.gamermvvmapp.presentation.navigation.Graph
 import com.carlostorres.gamermvvmapp.presentation.screens.login.components.ProgressBar
 import com.carlostorres.gamermvvmapp.presentation.screens.singup.SingupViewModel
 
@@ -20,8 +20,8 @@ fun SingUp(navController: NavController,viewModel : SingupViewModel = hiltViewMo
         is Response.Succes ->{
             LaunchedEffect(Unit){
                 viewModel.createUser()
-                navController.popBackStack(AuthScreen.Login.route, true)
-                navController.navigate(route = AuthScreen.Profile.route)
+                navController.popBackStack(Graph.AUTHENTICATION, true)
+                navController.navigate(route = Graph.HOME)
             }
         }
         is Response.Faliure -> {
