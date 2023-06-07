@@ -30,7 +30,7 @@ data class Post(
     ))
 
     companion object{
-        fun fromJson(data: String): User = Gson().fromJson(data, User::class.java)
+        fun fromJson(data: String): Post = Gson().fromJson(data, Post::class.java)
     }
 }
 

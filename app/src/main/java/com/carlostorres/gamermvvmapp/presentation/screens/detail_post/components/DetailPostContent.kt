@@ -18,9 +18,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,28 +39,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.carlostorres.gamermvvmapp.R
+import com.carlostorres.gamermvvmapp.presentation.screens.detail_post.DetailPostViewModel
 import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.components.NewPostContent
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink500
 import okhttp3.CertificatePinner
 
 @Composable
-fun DetailPostCOntent() {
+fun DetailPostCOntent(navController: NavHostController,viewModel: DetailPostViewModel= hiltViewModel()) {
 
     Column(modifier = Modifier
         .fillMaxWidth()
         .verticalScroll(rememberScrollState())) {
 
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            model = "",
-            contentDescription = "",
-            contentScale = ContentScale.Crop
-        )
+        Box() {
+
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                model = viewModel.post.image,
+                contentDescription = "",
+                contentScale = ContentScale.Crop
+            )
+
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "", tint = Color.White, modifier = Modifier.size(35.dp))
+            }
+
+        }
+
         Card(
             elevation = CardDefaults.cardElevation(4.dp),
             shape = RoundedCornerShape(15.dp),
@@ -76,7 +92,7 @@ fun DetailPostCOntent() {
                         .width(80.dp)
                         .clip(CircleShape)
                         .padding(horizontal = 10.dp),
-                    model = "",
+                    model = viewModel.post.user?.image ?: "",
                     contentDescription = "",
                     contentScale = ContentScale.Crop
                 )
@@ -84,9 +100,9 @@ fun DetailPostCOntent() {
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    Text(text = "Nombre del Usuario", fontSize = 13.sp)
+                    Text(text = viewModel.post.user?.username ?: "", fontSize = 13.sp)
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "E-mail", fontSize = 11.sp)
+                    Text(text = viewModel.post.user?.email ?: "", fontSize = 11.sp)
                 }
 
             }
@@ -94,7 +110,7 @@ fun DetailPostCOntent() {
         }
 
         Text(
-            text = "Titulo del juego",
+            text = viewModel.post.name,
             fontSize = 20.sp,
             color = Pink500,
             modifier = Modifier
@@ -113,13 +129,36 @@ fun DetailPostCOntent() {
                 modifier = Modifier.padding(5.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.icon_xbox),
+                    painter = painterResource(
+                        id = when(viewModel.post.category){
+                            "PC" ->{
+                                R.drawable.icon_pc
+                            }
+                            "PS4" ->{
+                                R.drawable.icon_ps4
+                            }
+                            "X-Box" ->{
+                                R.drawable.icon_xbox
+                            }
+                            "Nintendo" ->{
+                                R.drawable.icon_nintendo
+                            }
+                            "Móvil" ->{
+                                R.drawable.icon_pc
+                            }
+                            else->{
+                                R.drawable.icon_pc
+                            }
+                        }
+                        //if (viewModel.post.category == "PC") R.drawable.icon_pc
+
+                    ),
                     contentDescription = "",
                     modifier = Modifier.size(25.dp)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
-                    text = "Categoria",
+                    text = viewModel.post.category,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -141,7 +180,7 @@ fun DetailPostCOntent() {
         )
 
         Text(
-            text = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+            text = viewModel.post.description,
             fontSize = 14.sp,
             modifier = Modifier.padding(10.dp)
         )
@@ -150,16 +189,3 @@ fun DetailPostCOntent() {
 
 }
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun Preview() {
-    GamerMVVMAppTheme(darkTheme = true) {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            DetailPostCOntent()
-        }
-    }
-}

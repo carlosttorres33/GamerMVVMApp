@@ -15,7 +15,7 @@ fun DetailPostScreen(navController: NavHostController, post: String) {
 
     Scaffold (
         content = {
-            DetailPostCOntent()
+            DetailPostCOntent(navController)
         }
     )
 
