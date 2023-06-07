@@ -8,6 +8,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.carlostorres.gamermvvmapp.R
+import com.carlostorres.gamermvvmapp.domain.model.Post
+import com.carlostorres.gamermvvmapp.domain.model.Response
+import com.carlostorres.gamermvvmapp.domain.use_cases.auth.AuthUseCase
+import com.carlostorres.gamermvvmapp.domain.use_cases.post.PostUseCases
 import com.carlostorres.gamermvvmapp.presentation.utils.ComposeFileProvider
 import com.carlostorres.gamermvvmapp.presentation.utils.ResultingActivityHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +21,11 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class NewPostViewModel @Inject constructor(@ApplicationContext private val context: Context) :
+class NewPostViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val postUseCases: PostUseCases,
+    private val authUseCase: AuthUseCase
+    ) :
     ViewModel() {
 
     var state by mutableStateOf(NewPostsState())
@@ -33,6 +41,11 @@ class NewPostViewModel @Inject constructor(@ApplicationContext private val conte
     //File Image
     var file: File? = null
     val resultingActivityHandler = ResultingActivityHandler()
+
+    ////Post
+    var createPostResponse by mutableStateOf<Response<Boolean>?>(null)
+        private set
+    val currentUser = authUseCase.getCurrentUser()
 
     fun onNameInput(name: String) {
         state = state.copy(name = name)
@@ -68,7 +81,28 @@ class NewPostViewModel @Inject constructor(@ApplicationContext private val conte
     }
 
     fun onNewPost(){
-        Log.d("NewPostModel","${state.name},${state.description},${state.image},${state.cat}")
+        val post = Post(
+            name = state.name,
+            description = state.description,
+            category = state.cat,
+            idUser = currentUser?.uid ?: ""
+        )
+        createPost(post)
+    }
+
+    fun createPost(post : Post) = viewModelScope.launch {
+        createPostResponse = Response.Loading
+        val result = postUseCases.createPost(post, file!!)
+        createPostResponse = result
+    }
+
+    fun clearForm(){
+        state = state.copy(
+            name = "",
+            description = "",
+            image = "",
+            cat = ""
+        )
     }
 
 }

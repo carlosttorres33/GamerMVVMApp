@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTopBar
 import com.carlostorres.gamermvvmapp.presentation.navigation.DetailsScreen
+import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.components.NewPost
 import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.components.NewPostContent
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 
@@ -56,6 +57,8 @@ fun NewPostScreen(navController: NavHostController, viewModel: NewPostViewModel 
             )
         }
     )
+
+    NewPost()
 
 }
 

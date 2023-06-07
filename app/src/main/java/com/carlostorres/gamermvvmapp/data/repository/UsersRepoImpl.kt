@@ -1,6 +1,7 @@
 package com.carlostorres.gamermvvmapp.data.repository
 
 import android.net.Uri
+import com.carlostorres.gamermvvmapp.core.Constants
 import com.carlostorres.gamermvvmapp.domain.model.Response
 import com.carlostorres.gamermvvmapp.domain.model.User
 import com.carlostorres.gamermvvmapp.domain.repository.UsersRepository
@@ -12,10 +13,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.io.File
 import javax.inject.Inject
+import javax.inject.Named
 
 class UsersRepoImpl @Inject constructor(
-    private val usersRef: CollectionReference,
-    private val storageUsersRef: StorageReference
+    @Named(Constants.USERS) private val usersRef: CollectionReference,
+    @Named(Constants.USERS) private val storageUsersRef: StorageReference
 ) : UsersRepository {
 
     ///Sin inyección de dependencias
