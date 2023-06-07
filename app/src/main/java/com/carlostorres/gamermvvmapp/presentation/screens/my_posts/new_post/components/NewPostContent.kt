@@ -2,6 +2,7 @@ package com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.com
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
@@ -26,41 +28,50 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.carlostorres.gamermvvmapp.R
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTextField
+import com.carlostorres.gamermvvmapp.presentation.components.DialogCapturePicture
 import com.carlostorres.gamermvvmapp.presentation.navigation.RootNavGraph
+import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.NewPostViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink500
-
-data class CategoryRadioButton(
-    var cat: String,
-    var img: Int
-)
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun NewPostContent() {
+fun NewPostContent(viewModel: NewPostViewModel = hiltViewModel() ) {
 
-    val radioOptions = listOf(
-        CategoryRadioButton("PC", R.drawable.icon_pc),
-        CategoryRadioButton("PS4", R.drawable.icon_ps4),
-        CategoryRadioButton("X-Box", R.drawable.icon_xbox),
-        CategoryRadioButton("Nintendo", R.drawable.icon_nintendo),
-        CategoryRadioButton("Móvil", R.drawable.icon_pc),
+    val state = viewModel.state
+
+    viewModel.resultingActivityHandler.handle()
+
+    var dialogState = remember{ mutableStateOf(false) }
+    DialogCapturePicture(
+        status = dialogState,
+        takePhoto = { viewModel.takePhoto() },
+        pickImage = {viewModel.pickImage()}
     )
 
     Box (
-        modifier = Modifier.fillMaxWidth().padding(bottom = 55.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 55.dp)
     ){
 
         Column(
@@ -80,17 +91,35 @@ fun NewPostContent() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(60.dp))
-                    Image(
-                        modifier = Modifier.height(150.dp),
-                        painter = painterResource(id = R.drawable.add_image),
-                        contentDescription = ""
-                    )
-                    Text(
-                        text = "SELECCIONA UNA IMAGEN",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 19.sp
-                    )
+                    ////////////IMAGE
+                    if (viewModel.state.image != ""){
+                        AsyncImage(
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(190.dp)
+                                .clickable {
+                                    dialogState.value = true
+                                },
+                            model = viewModel.state.image,
+                            contentDescription = "Selected Image"
+                        )
+                    }else{
+                        Image(
+                            modifier = Modifier.height(150.dp).clickable { dialogState.value = true },
+                            painter = painterResource(id = R.drawable.add_image),
+                            contentDescription = ""
+
+                        )
+                        Text(
+                            text = "SELECCIONA UNA IMAGEN",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 19.sp
+                        )
+                    }
+                    //////////7
+
                 }
             }
 
@@ -99,9 +128,9 @@ fun NewPostContent() {
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .padding(top = 30.dp),
-                value = "",
+                value = state.name,
                 onValueChange = {
-
+                    viewModel.onNameInput(it)
                 },
                 label = "Nombre del juego",
                 icon = Icons.Default.Favorite,
@@ -115,9 +144,9 @@ fun NewPostContent() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                value = "",
+                value = state.description,
                 onValueChange = {
-
+                    viewModel.onDescriptionInput(it)
                 },
                 label = "Descripción",
                 icon = Icons.Default.List,
@@ -135,7 +164,7 @@ fun NewPostContent() {
                 fontSize = 19.sp
             )
 
-            radioOptions.forEach { option ->
+            viewModel.radioOptions.forEach { option ->
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -143,15 +172,17 @@ fun NewPostContent() {
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .selectable(
-                            selected = false,
+                            selected = (option.cat == state.cat),
                             onClick = {
-
+                                viewModel.onCategoryInput(option.cat)
                             }
                         )
                 ){
                     RadioButton(
-                        selected = false,
-                        onClick = {}
+                        selected = (option.cat == state.cat),
+                        onClick = {
+                            viewModel.onCategoryInput(option.cat)
+                        }
                     )
 
                     Row(
