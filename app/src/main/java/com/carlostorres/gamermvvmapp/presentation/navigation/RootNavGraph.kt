@@ -27,8 +27,6 @@ fun RootNavGraph(navController: NavHostController) {
             HomeScreen()
         }
 
-
-
     }
     
 }

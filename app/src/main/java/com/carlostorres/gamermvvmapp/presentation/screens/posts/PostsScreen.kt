@@ -14,7 +14,7 @@ fun PostsScreen(navController: NavHostController) {
     
     Scaffold(
         content = {
-            Text(text = "My Posts Screen")
+            Text(text = "Posts Screen")
         }
     )
     
