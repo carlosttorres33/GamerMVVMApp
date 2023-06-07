@@ -1,6 +1,7 @@
 package com.carlostorres.gamermvvmapp.presentation.screens.posts.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,13 +20,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.carlostorres.gamermvvmapp.domain.model.Post
+import com.carlostorres.gamermvvmapp.presentation.navigation.DetailsScreen
 
 @Composable
-fun PostsCard(post: Post) {
+fun PostsCard(navController: NavHostController, post: Post) {
     Card(
-        modifier = Modifier.padding(top = 1.dp, bottom = 5.dp),
+        modifier = Modifier
+            .padding(
+                top = 1.dp,
+                bottom = 5.dp)
+            .clickable {
+                navController.navigate(route = DetailsScreen.DetailPost.passPost(post.toJson()))
+            },
         elevation = CardDefaults.cardElevation(4.dp),
         //colors = CardDefaults.cardColors(Color.White),
         shape = RoundedCornerShape(1.dp)
@@ -33,7 +42,7 @@ fun PostsCard(post: Post) {
         Column() {
             Text(
                 modifier = Modifier.padding(horizontal = 5.dp),
-                text = post.idUser,
+                text = post.user?.username ?: "",
                 fontSize = 12.sp
             )
             AsyncImage(
@@ -51,7 +60,7 @@ fun PostsCard(post: Post) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                modifier = Modifier.padding(horizontal = 5.dp),
+                modifier = Modifier.padding(horizontal = 5.dp).padding(bottom = 5.dp),
                 text = post.description,
                 fontSize = 13.sp,
                 maxLines = 2,

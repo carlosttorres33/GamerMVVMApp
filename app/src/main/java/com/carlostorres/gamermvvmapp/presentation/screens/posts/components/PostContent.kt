@@ -12,10 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.carlostorres.gamermvvmapp.domain.model.Post
 
 @Composable
 fun PostContent(
+    navController: NavHostController,
     posts: List<Post>
 ) {
 
@@ -27,7 +29,7 @@ fun PostContent(
         items(
             items = posts
         ){ posts ->
-            PostsCard(posts)
+            PostsCard(navController, posts)
         }
     }
 
