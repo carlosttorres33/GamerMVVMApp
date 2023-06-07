@@ -14,6 +14,7 @@ import com.carlostorres.gamermvvmapp.domain.use_cases.auth.Login
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.Logout
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.SingUp
 import com.carlostorres.gamermvvmapp.domain.use_cases.post.CreatePost
+import com.carlostorres.gamermvvmapp.domain.use_cases.post.GetPosts
 import com.carlostorres.gamermvvmapp.domain.use_cases.post.PostUseCases
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.Create
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.GetUserById
@@ -88,7 +89,8 @@ object AppModule {
 
     @Provides
     fun providePostUseCases(repository: PostRepository) = PostUseCases(
-        createPost = CreatePost(repository)
+        createPost = CreatePost(repository),
+        getPosts = GetPosts(repository)
     )
 
 }

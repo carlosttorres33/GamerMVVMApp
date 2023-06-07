@@ -7,6 +7,9 @@ import com.carlostorres.gamermvvmapp.domain.model.Response
 import com.carlostorres.gamermvvmapp.domain.repository.PostRepository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.io.File
 import javax.inject.Inject
@@ -16,6 +19,27 @@ class PostRepoImpl @Inject constructor(
     @Named(POST) private val postRef: CollectionReference,
     @Named(POST) private val storagePostRef: StorageReference,
 ) : PostRepository {
+    override fun getPost(): Flow<Response<List<Post>>>  = callbackFlow {
+
+        val snapshotListener = postRef.addSnapshotListener{ snapshot, e ->
+
+            val postResponse = if (snapshot != null){
+                val posts = snapshot.toObjects(Post::class.java)
+                Response.Succes(posts)
+            }else{
+                Response.Faliure(e!!)
+            /////////////////////////// Posible Bug
+            }
+
+            trySend(postResponse)
+
+        }
+
+        awaitClose{
+            snapshotListener.remove()
+        }
+
+    }
 
     override suspend fun create(post: Post, file: File): Response<Boolean> {
         return try {

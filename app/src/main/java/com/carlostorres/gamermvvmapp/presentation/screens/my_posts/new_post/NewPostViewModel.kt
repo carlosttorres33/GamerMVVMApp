@@ -103,6 +103,8 @@ class NewPostViewModel @Inject constructor(
             image = "",
             cat = ""
         )
+
+        createPostResponse = null
     }
 
 }
