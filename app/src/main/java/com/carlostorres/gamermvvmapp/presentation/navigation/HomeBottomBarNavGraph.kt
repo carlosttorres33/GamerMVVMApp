@@ -1,6 +1,7 @@
 package com.carlostorres.gamermvvmapp.presentation.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.List
@@ -34,6 +35,7 @@ fun HomeBottomBarNavGraph(navController: NavHostController) {
             MyPostsScreen(navController)
         }
 
+        detailsNavGraph(navController)
     }
 
 }
@@ -47,7 +49,7 @@ sealed class HomeBottomBarScreen(
     object Posts : HomeBottomBarScreen(
         route = "posts_list",
         tittle = "Publicaciones",
-        icon = Icons.Default.List
+        icon = Icons.Outlined.List
     )
 
     object MyPosts : HomeBottomBarScreen(

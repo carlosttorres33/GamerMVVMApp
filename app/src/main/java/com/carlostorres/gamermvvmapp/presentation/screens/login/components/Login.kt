@@ -7,9 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.carlostorres.gamermvvmapp.domain.model.Response
-import com.carlostorres.gamermvvmapp.presentation.navigation.AuthScreen
 import com.carlostorres.gamermvvmapp.presentation.navigation.Graph
-import com.carlostorres.gamermvvmapp.presentation.navigation.RootScreen
 import com.carlostorres.gamermvvmapp.presentation.screens.login.LoginViewModel
 
 @Composable
@@ -20,7 +18,7 @@ fun Login(navController: NavHostController, viewModel: LoginViewModel = hiltView
         }
         is Response.Succes -> {
             LaunchedEffect(Unit){
-                navController.navigate(route = RootScreen.Home.route){
+                navController.navigate(route = Graph.HOME){
                     popUpTo(Graph.AUTHENTICATION) {inclusive = true}
                 }
             }

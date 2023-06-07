@@ -1,5 +1,7 @@
 package com.carlostorres.gamermvvmapp.presentation.screens.profile.components
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,8 +33,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.carlostorres.gamermvvmapp.R
+import com.carlostorres.gamermvvmapp.presentation.MainActivity
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
 import com.carlostorres.gamermvvmapp.presentation.navigation.AuthScreen
+import com.carlostorres.gamermvvmapp.presentation.navigation.DetailsScreen
+import com.carlostorres.gamermvvmapp.presentation.navigation.Graph
 import com.carlostorres.gamermvvmapp.presentation.screens.profile.ProfileViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.*
 
@@ -41,6 +47,7 @@ fun ProfileContent(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
 
+    val activity = LocalContext.current as? Activity
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -110,7 +117,7 @@ fun ProfileContent(
             colorText = Color.Black,
             icono = Icons.Default.Edit,
             onClick = {
-                navController.navigate(AuthScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
+                navController.navigate(DetailsScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },
             colorIcon = Color.Black
         )
@@ -125,11 +132,8 @@ fun ProfileContent(
             colorText = Color.White,
             onClick = {
                 viewModel.logout()
-                navController.navigate(route = AuthScreen.Login.route) {
-                    popUpTo(AuthScreen.Profile.route) {
-                        inclusive = true
-                    }
-                }
+                activity?.finish()
+                activity?.startActivity(Intent(activity, MainActivity::class.java))
             },
             colorIcon = Color.White
         )

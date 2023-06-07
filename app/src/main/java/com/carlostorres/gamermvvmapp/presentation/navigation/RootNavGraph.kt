@@ -23,25 +23,14 @@ fun RootNavGraph(navController: NavHostController) {
 
         authNavGraph(navController = navController)
 
-        composable(route = RootScreen.Home.route){
+        composable(route = Graph.HOME){
             HomeScreen()
         }
 
-        composable(
-            route = AuthScreen.ProfileEdit.route,
-            arguments = listOf(navArgument("user"){
-                type = NavType.StringType
-            })
-        ){
-            it.arguments?.getString("user")?.let { user ->
-                ProfileEditScreen(navController, user = user)
-            }
-        }
+
 
     }
     
 }
 
-sealed class RootScreen(val route: String){
-    object Home: RootScreen("home")
-}
+
