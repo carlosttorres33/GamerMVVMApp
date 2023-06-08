@@ -8,13 +8,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.carlostorres.gamermvvmapp.presentation.navigation.DetailsScreen
-import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.components.NewPostContent
+import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.components.GetPostsByIdUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -23,7 +22,7 @@ fun MyPostsScreen(navController: NavHostController) {
 
     Scaffold (
         content = {
-            Text(text = "My Post Screen")
+            GetPostsByIdUser(navController = navController)
         },
         floatingActionButton = {
             FloatingActionButton(

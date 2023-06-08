@@ -8,7 +8,12 @@ import java.io.File
 interface PostRepository {
 
     fun getPost(): Flow<Response<List<Post>>>
+    fun getPostByUserId(idUser: String): Flow<Response<List<Post>>>
 
     suspend fun create(post: Post, file: File): Response<Boolean>
+    suspend fun delete(idPost: String): Response<Boolean>
+    suspend fun update(post: Post, file: File?): Response<Boolean>
+    suspend fun like(idPost: String, idUser:String): Response<Boolean>
+    suspend fun deleteLike(idPost: String, idUser:String): Response<Boolean>
 
 }

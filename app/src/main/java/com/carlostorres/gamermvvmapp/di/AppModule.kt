@@ -14,8 +14,13 @@ import com.carlostorres.gamermvvmapp.domain.use_cases.auth.Login
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.Logout
 import com.carlostorres.gamermvvmapp.domain.use_cases.auth.SingUp
 import com.carlostorres.gamermvvmapp.domain.use_cases.post.CreatePost
+import com.carlostorres.gamermvvmapp.domain.use_cases.post.DeletePost
+import com.carlostorres.gamermvvmapp.domain.use_cases.post.DislikePost
+import com.carlostorres.gamermvvmapp.domain.use_cases.post.GetPostByIdUser
 import com.carlostorres.gamermvvmapp.domain.use_cases.post.GetPosts
+import com.carlostorres.gamermvvmapp.domain.use_cases.post.LikePost
 import com.carlostorres.gamermvvmapp.domain.use_cases.post.PostUseCases
+import com.carlostorres.gamermvvmapp.domain.use_cases.post.UpdatePost
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.Create
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.GetUserById
 import com.carlostorres.gamermvvmapp.domain.use_cases.users.SaveImage
@@ -90,7 +95,12 @@ object AppModule {
     @Provides
     fun providePostUseCases(repository: PostRepository) = PostUseCases(
         createPost = CreatePost(repository),
-        getPosts = GetPosts(repository)
+        getPosts = GetPosts(repository),
+        getPostByIdUser = GetPostByIdUser(repository),
+        deletePost = DeletePost(repository),
+        updatePost = UpdatePost(repository),
+        likePost = LikePost(repository),
+        dislikePost = DislikePost(repository)
     )
 
 }

@@ -1,10 +1,10 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post
+package com.carlostorres.gamermvvmapp.presentation.screens.update_post
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.carlostorres.gamermvvmapp.R
@@ -21,14 +21,15 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class NewPostViewModel @Inject constructor(
+class UpdatePostViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val savedStateHandle: SavedStateHandle,
     private val postUseCases: PostUseCases,
     private val authUseCase: AuthUseCase
     ) :
     ViewModel() {
 
-    var state by mutableStateOf(NewPostsState())
+    var state by mutableStateOf(UpdatePostState())
 
     val radioOptions = listOf(
         CategoryRadioButton("PC", R.drawable.icon_pc),
@@ -43,9 +44,17 @@ class NewPostViewModel @Inject constructor(
     val resultingActivityHandler = ResultingActivityHandler()
 
     ////Post
-    var createPostResponse by mutableStateOf<Response<Boolean>?>(null)
+    var updatePostResponse by mutableStateOf<Response<Boolean>?>(null)
         private set
     val currentUser = authUseCase.getCurrentUser()
+
+    //Recuperar argumentos que ya existen en el POST
+    val data = savedStateHandle.get<String>("post")
+    val post = Post.fromJson(data!!)
+
+    init {
+        state=state.copy(name = post.name, description = post.description, image = post.image, cat = post.category)
+    }
 
     fun onNameInput(name: String) {
         state = state.copy(name = name)
@@ -80,31 +89,34 @@ class NewPostViewModel @Inject constructor(
         }
     }
 
-    fun onNewPost(){
+    fun onUpdatePost(){
         val post = Post(
+            id = post.id,
             name = state.name,
             description = state.description,
             category = state.cat,
+            image = post.image,
             idUser = currentUser?.uid ?: ""
         )
-        createPost(post)
+        updatePost(post)
     }
 
-    fun createPost(post : Post) = viewModelScope.launch {
-        createPostResponse = Response.Loading
-        val result = postUseCases.createPost(post, file!!)
-        createPostResponse = result
+    fun updatePost(post : Post) = viewModelScope.launch {
+        updatePostResponse = Response.Loading
+        val result = postUseCases.updatePost(post, file)
+        updatePostResponse = result
     }
 
     fun clearForm(){
-        state = state.copy(
+        /*state = state.copy(
             name = "",
             description = "",
             image = "",
             cat = ""
-        )
+        )*/
 
-        createPostResponse = null
+        updatePostResponse = null
+
     }
 
 }

@@ -1,15 +1,12 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post
+package com.carlostorres.gamermvvmapp.presentation.screens.new_post
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -22,9 +19,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultButton
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTopBar
-import com.carlostorres.gamermvvmapp.presentation.navigation.DetailsScreen
-import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.components.NewPost
-import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.components.NewPostContent
+import com.carlostorres.gamermvvmapp.presentation.screens.new_post.components.NewPost
+import com.carlostorres.gamermvvmapp.presentation.screens.new_post.components.NewPostContent
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

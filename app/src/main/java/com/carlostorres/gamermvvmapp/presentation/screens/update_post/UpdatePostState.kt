@@ -1,6 +1,6 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post
+package com.carlostorres.gamermvvmapp.presentation.screens.update_post
 
-data class NewPostsState (
+data class UpdatePostState (
     val image: String ="",
     val name :String ="",
     val description: String="",

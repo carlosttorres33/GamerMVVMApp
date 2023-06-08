@@ -1,4 +1,4 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.posts
+package com.carlostorres.gamermvvmapp.presentation.screens.my_posts
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,35 +14,29 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PostViewModel @Inject constructor(
+class MyPostViewModel @Inject constructor(
     private val postUseCases: PostUseCases,
-    private val authUseCases: AuthUseCase
+    private val authUseCase: AuthUseCase
 ) :ViewModel() {
 
     var postResponse by mutableStateOf<Response<List<Post>>?>(null)
-    var likePostResponse by mutableStateOf<Response<Boolean>?>(null)
-    var dislkePostResponse by mutableStateOf<Response<Boolean>?>(null)
-    var currentUser = authUseCases.getCurrentUser
+    var deleteResponse by mutableStateOf<Response<Boolean>?>(null)
+    val currentUser = authUseCase.getCurrentUser()
 
     init {
         getPosts()
     }
 
-    fun like(idPost:String, idUser:String) = viewModelScope.launch {
-        likePostResponse = Response.Loading
-        val result = postUseCases.likePost(idPost,idUser)
-        likePostResponse=result
-    }
-    fun dislike(idPost:String, idUser:String) = viewModelScope.launch {
-        dislkePostResponse = Response.Loading
-        val result = postUseCases.dislikePost(idPost, idUser)
-        dislkePostResponse=result
+    fun delete(idPost:String)= viewModelScope.launch {
+        deleteResponse = Response.Loading
+        val result = postUseCases.deletePost(idPost)
+        deleteResponse = result
     }
 
     fun getPosts() = viewModelScope.launch {
 
         postResponse = Response.Loading
-        postUseCases.getPosts().collect(){
+        postUseCases.getPostByIdUser(currentUser?.uid ?: "").collect(){
             postResponse = it
         }
 

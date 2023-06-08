@@ -1,4 +1,4 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.components
+package com.carlostorres.gamermvvmapp.presentation.screens.new_post.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,17 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,27 +27,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.carlostorres.gamermvvmapp.R
 import com.carlostorres.gamermvvmapp.presentation.components.DefaultTextField
 import com.carlostorres.gamermvvmapp.presentation.components.DialogCapturePicture
-import com.carlostorres.gamermvvmapp.presentation.navigation.RootNavGraph
-import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.new_post.NewPostViewModel
+import com.carlostorres.gamermvvmapp.presentation.screens.new_post.NewPostViewModel
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 import com.carlostorres.gamermvvmapp.presentation.ui.theme.Pink500
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun NewPostContent(viewModel: NewPostViewModel = hiltViewModel() ) {

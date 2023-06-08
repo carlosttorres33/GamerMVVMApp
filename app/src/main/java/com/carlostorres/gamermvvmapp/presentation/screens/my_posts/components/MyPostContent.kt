@@ -1,4 +1,4 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.posts.components
+package com.carlostorres.gamermvvmapp.presentation.screens.my_posts.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import com.carlostorres.gamermvvmapp.domain.model.Post
 
 @Composable
-fun PostContent(
+fun MyPostContent(
     navController: NavHostController,
     posts: List<Post>
 ) {
@@ -24,7 +24,7 @@ fun PostContent(
         items(
             items = posts
         ){ posts ->
-            PostsCard(navController, posts)
+            MyPostsCard(navController, posts)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.carlostorres.gamermvvmapp.presentation.screens.posts.components
+package com.carlostorres.gamermvvmapp.presentation.screens.my_posts.components
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -7,17 +7,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.carlostorres.gamermvvmapp.domain.model.Response
 import com.carlostorres.gamermvvmapp.presentation.screens.login.components.ProgressBar
-import com.carlostorres.gamermvvmapp.presentation.screens.posts.PostViewModel
+import com.carlostorres.gamermvvmapp.presentation.screens.my_posts.MyPostViewModel
 
 @Composable
-fun GetPosts(navController: NavHostController, viewModel: PostViewModel = hiltViewModel()) {
+fun GetPostsByIdUser(navController: NavHostController, viewModel: MyPostViewModel = hiltViewModel()) {
 
     when(val response = viewModel.postResponse){
         Response.Loading ->{
             ProgressBar()
         }
         is Response.Succes -> {
-            PostContent(navController = navController, posts = response.data)
+            MyPostContent(navController = navController, posts = response.data)
         }
         is Response.Faliure -> {
             Toast.makeText(LocalContext.current, response.exception.message ?: "Error Desconocido" , Toast.LENGTH_SHORT).show()
